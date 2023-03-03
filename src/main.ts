@@ -19,38 +19,47 @@ const main = async () => {
   await context.clearPermissionOverrides();
   await context.overridePermissions(expectedUrl, ["camera", "microphone"]);
   await page.goto("https://web.snapchat.com/");
+  
+  const ShotButton = await page.waitForSelector("button.FBYjn");
+  
+  console.log("waiting...")
+  const camSquare = await page.waitForSelector(".J_Y1K")
+  const camSquareClassList = (await camSquare?.getProperty("className"))?.toString()
+
+  
+  const CamShot = async () => {
+    console.log("cam already turned on shooting", camSquareClassList)
+    await ShotButton?.click().then(async ()=>{
+      console.log("picture taken!")
+      const sendingButton = await page.$('button.eiRwx')
+      await sendingButton?.click().then(async ()=>{
+        console.log("select users:")
+      })
+    } )
+  }
+  const turnOnCam = async () => {
+    console.log("turning on camera...", camSquareClassList)
+    await camSquare?.click().then(
+      async ()=>{
+        if(!camSquareClassList?.includes("pky39")) console.log("cam turned on")
+        CamShot();
+      }
+    )
+
+
+  }
 
   setTimeout(async () => {
-    const ShotButton = await page.waitForSelector("button.FBYjn");
-    
-    await ShotButton?.click().then(async () => {
-      if (ShotButton) ShotButton.click();
-      console.log("snapped");
-      if (ShotButton) ShotButton.click();
-      const sendButton = await page.waitForSelector("button.eiRwx");
-      await sendButton?.click().then(async () => {
-        console.log("sending...");
-        const friendsElement = await page.$$('ul.UxcmY>li>div.Ewflr')
-        console.log(friendsElement)
-        friendsElement.forEach(async (element) => {
-          await element.click()
-        })
-        
-        /* const elementsWithEmoji = await page.$$(
-          '.UxcmY > .Ewflr:not(iframe):not(script)x'
-        );
-        const filteredElement = elementsWithEmoji.filter((element)=>{
-          return element
-        })
+    if (!camSquare) return;
+    camSquareClassList?.includes("pky39") ? turnOnCam() : CamShot();
+    const cls = (await ShotButton?.getProperty("className"))?.toString()
+    if(!cls) return;
+    console.log(cls)
+    console.log("done!")
+  }, 2000);
+
+
   
-        
-          for(const element of elementsWithEmoji){
-            await element.click()
-          } */
-        
-      });
-    });
-  }, 5000);
 };
 
 main();
