@@ -34,6 +34,19 @@ const main = async () => {
       const sendingButton = await page.$('button.eiRwx')
       await sendingButton?.click().then(async ()=>{
         console.log("select users:")
+        const searchInput = await page.$$("input.dmsdi")
+        await searchInput[1]?.type("💎")
+        const radioSelectors = await page.$$("div.Ewflr")
+        console.log(radioSelectors.length)
+        for(const radio of radioSelectors){
+          const radioProperty = (await radio.getProperty('className')).toString()
+          console.log(radioProperty)
+          await radio.click()
+        }
+      const finalSendButton = await page.$("button.xjFne")
+      await finalSendButton?.click().then(()=>{
+        console.log("image sended")
+      })
       })
     } )
   }
