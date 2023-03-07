@@ -46,7 +46,9 @@ const main = async () => {
       const finalSendButton = await page.$("button.xjFne")
       await finalSendButton?.click().then(()=>{
         console.log("image sended")
-        browser.close()
+        setTimeout(()=>{
+          browser.close()
+        }, 3000)
       })
       })
     } )
@@ -70,13 +72,14 @@ const main = async () => {
     if(!cls) return;
     console.log(cls)
     console.log("done!")
-  }, 2000);
+  }, 1000);
 
 
   
 };
 
+main()
+
 setInterval(()=>{
   main()
-}, 1000*3600*20)
-
+}, 1000*3600*8)
